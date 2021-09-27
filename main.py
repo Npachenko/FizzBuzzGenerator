@@ -17,11 +17,13 @@ class FizzBuzzGenerator:
         self.iFizzBuzz = iFizz*iBuzz
         self.slider = self.get_rem(start)
         self.order = self.get_order(start)
-        self.stack = []
+        self.stock = []
         self.try_check = 0
+    
     
     def __iter__(self):
         return self
+
 
     def __next__(self):
         if self.slider == self.iFizzBuzz:
@@ -29,12 +31,14 @@ class FizzBuzzGenerator:
             self.order += 1
         self.slider += 1
         if self.try_check < self.iFizzBuzz:
-            self.stack.append(self.check_fizz_buzz(self.slider))
+            self.stock.append(self.check_fizz_buzz(self.slider))
             self.try_check += 1
         else:
             self.try_check = 1
+        ind = self.try_check-1
 
-        return self.stack[self.try_check-1]
+        return self.stock[ind]+self.iFizzBuzz*self.order if isinstance(self.stock[ind], int) else self.stock[ind]
+
 
     def get_rem(self, start):
         """
@@ -44,6 +48,7 @@ class FizzBuzzGenerator:
         """
         return (start%self.iFizzBuzz)-1
 
+
     def get_order(self, start):
         """
         Method for define order of сycle
@@ -52,7 +57,13 @@ class FizzBuzzGenerator:
         """
         return floor(start/self.iFizzBuzz)
     
+
     def check_fizz_buzz(self, num):
+        """
+        Method for calculate actual FizzBuzzNumber
+
+        num || Numer for calculation
+        """
         return 'FizzBuzz' if num%self.iFizzBuzz==0 else \
             'Fizz' if num%self.iFizz==0 else \
                 'Buzz' if num%self.iBuzz==0 else num
