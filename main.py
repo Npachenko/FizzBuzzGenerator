@@ -17,20 +17,24 @@ class FizzBuzzGenerator:
         self.iFizzBuzz = iFizz*iBuzz
         self.slider = self.get_rem(start)
         self.order = self.get_order(start)
+        self.stack = []
+        self.try_check = 0
     
     def __iter__(self):
         return self
 
     def __next__(self):
-        i = self.slider
         if self.slider == self.iFizzBuzz:
             self.slider = 0
             self.order += 1
         self.slider += 1
-        return 'FizzBuzz' if i%self.iFizzBuzz==0 else \
-            'Fizz' if i%self.iFizz==0 else \
-                'Buzz' if i%self.iBuzz==0 else \
-                    i+(self.order*self.iFizzBuzz)
+        if self.try_check < self.iFizzBuzz:
+            self.stack.append(self.check_fizz_buzz(self.slider))
+            self.try_check += 1
+        else:
+            self.try_check = 1
+
+        return self.stack[self.try_check-1]
 
     def get_rem(self, start):
         """
@@ -38,7 +42,7 @@ class FizzBuzzGenerator:
 
         start || The first number to start the count from.
         """
-        return (start%self.iFizzBuzz)
+        return (start%self.iFizzBuzz)-1
 
     def get_order(self, start):
         """
@@ -47,3 +51,8 @@ class FizzBuzzGenerator:
         start || The first number to start the count from.
         """
         return floor(start/self.iFizzBuzz)
+    
+    def check_fizz_buzz(self, num):
+        return 'FizzBuzz' if num%self.iFizzBuzz==0 else \
+            'Fizz' if num%self.iFizz==0 else \
+                'Buzz' if num%self.iBuzz==0 else num
